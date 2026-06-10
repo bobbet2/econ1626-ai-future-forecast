@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Hollow Pyramid — AI and the Australian Legal Profession to 2030</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root{
+    --ink:#0E1B2C;
+    --ink-2:#22364e;
+    --paper:#EEF0F2;
+    --card:#FFFFFF;
+    --brass:#B08344;        /* accent: legal gravitas */
+    --teal:#1F7A7A;         /* junior */
+    --rose:#C2453A;         /* shortage / downside */
+    --green:#3F7A52;        /* upside */
+    --amber:#C99A3C;        /* baseline */
+    --muted:#5d6b7a;
+    --line:#d6dbe0;
+    --maxw:760px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Inter",system-ui,sans-serif;font-size:18px;line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+  h1,h2,h3{font-family:"Fraunces",Georgia,serif;font-weight:600;line-height:1.12;letter-spacing:-0.01em}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);margin:0 0 10px}
+  a{color:var(--brass)}
+
+  /* HERO */
+  header.hero{background:var(--ink);color:#eef0f2;padding:64px 0 52px;position:relative;overflow:hidden}
+  header.hero .wrap{position:relative;z-index:2}
+  .hero h1{font-size:clamp(38px,7vw,68px);font-weight:700;color:#fff;margin:6px 0 18px}
+  .hero h1 em{font-style:italic;color:var(--brass)}
+  .hero .lede{font-size:clamp(18px,2.4vw,21px);color:#c4ccd6;max-width:620px;margin:0}
+  .hero .thesis{margin-top:30px;border-left:3px solid var(--brass);padding:14px 0 14px 20px;font-family:"Fraunces",serif;font-size:clamp(19px,2.6vw,23px);line-height:1.45;color:#eef0f2;max-width:640px}
+  .hero .meta{margin-top:26px;font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:#8a98a8;letter-spacing:.04em}
+
+  /* NAV */
+  nav.toc{position:sticky;top:0;z-index:30;background:rgba(238,240,242,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  nav.toc .wrap{display:flex;gap:4px;overflow-x:auto;padding:10px 22px}
+  nav.toc a{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);text-decoration:none;white-space:nowrap;padding:6px 10px;border-radius:6px}
+  nav.toc a:hover{color:var(--ink);background:#e2e6ea}
+
+  /* SECTIONS */
+  section{padding:54px 0;border-bottom:1px solid var(--line)}
+  section h2{font-size:clamp(27px,4vw,38px);margin:0 0 8px}
+  .sub{color:var(--muted);font-size:16px;margin:0 0 26px;max-width:600px}
+  p{margin:0 0 18px}
+  .lead{font-size:20px}
+  strong{font-weight:600}
+  .pull{font-family:"Fraunces",serif;font-size:23px;line-height:1.4;color:var(--ink);border-top:2px solid var(--brass);border-bottom:1px solid var(--line);padding:18px 0;margin:28px 0}
+
+  /* citation placeholder — easy to find + replace */
+  .cite{background:#fcefe0;color:#9a5b1d;border:1px dashed #d39a5b;border-radius:4px;font-family:"IBM Plex Mono",monospace;font-size:12.5px;padding:1px 5px;white-space:normal}
+
+  /* CARDS / CONTROLS */
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;margin:26px 0;box-shadow:0 1px 2px rgba(14,27,44,.04)}
+  .controls{display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin-bottom:18px}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+  .seg button{font-family:"IBM Plex Mono",monospace;font-size:12.5px;letter-spacing:.03em;text-transform:uppercase;border:0;background:#fff;color:var(--muted);padding:9px 14px;cursor:pointer}
+  .seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+  .seg button:focus-visible{outline:2px solid var(--brass);outline-offset:-2px}
+  .yearrow{display:flex;align-items:center;gap:12px;font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--muted)}
+  input[type=range]{accent-color:var(--brass);width:220px}
+
+  /* PYRAMID */
+  .pyramid{display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 0 4px}
+  .tier{height:38px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.03em;transition:width .55s cubic-bezier(.6,.1,.2,1),background .4s;min-width:54px;white-space:nowrap;overflow:hidden}
+  .t-grad{background:#5a8a8a}
+  .t-jun{background:var(--teal)}
+  .t-sen{background:#3b5168}
+  .t-spc{background:#2b3f56}
+  .t-par{background:var(--ink)}
+  .pcap{font-size:14.5px;color:var(--muted);margin-top:14px;min-height:48px}
+  .pcap b{color:var(--ink)}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--muted);margin-top:6px}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .dot{width:10px;height:10px;border-radius:2px;display:inline-block}
+
+  /* TASK SPLIT */
+  .tasks{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .tasks .col{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px}
+  .tasks h4{margin:0 0 10px;font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+  .tasks .auto h4{color:var(--rose)}
+  .tasks .prot h4{color:var(--teal)}
+  .tasks ul{margin:0;padding-left:18px}
+  .tasks li{margin:0 0 8px;font-size:15.5px}
+  .moat{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--muted);display:block;margin-top:2px}
+  .chartbox{position:relative;height:320px}
+  table.kpi{width:100%;border-collapse:collapse;font-size:15px;margin-top:8px}
+  table.kpi th,table.kpi td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.kpi th{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  footer{background:var(--ink);color:#aab6c4;padding:46px 0;font-size:14.5px}
+  footer a{color:var(--brass)}
+  footer h3{color:#fff;font-size:20px;margin:0 0 12px}
+  .disc{background:#18283c;border:1px solid #2a3c52;border-radius:12px;padding:18px 20px;margin:18px 0;color:#c4ccd6;font-size:14px}
+  @media(max-width:620px){
+    body{font-size:17px}
+    .tasks{grid-template-columns:1fr}
+    input[type=range]{width:150px}
+  }
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">AI Future Forecast · Australian Legal Services · 2025–2035</p>
+    <h1>The <em>Hollow</em> Pyramid</h1>
+    <p class="lede">AI is fastest at the routine work that fills a junior lawyer's day. The trouble is that this same work is how the profession builds its senior judgment — so automating it quietly dismantles the staircase to the top.</p>
+    <p class="thesis">The automation of routine junior-level legal tasks is expected to cause a shortage of people qualified for senior roles by 2030 — unless legal demand grows or new training pathways are introduced. AI creates the shortage by automating the very tasks through which juniors acquire the skills, knowledge and judgment that senior roles require.</p>
+    <p class="meta">An interactive forecast · ECON1626 · [YOUR NAME / STUDENT ID]</p>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="wrap">
+    <a href="#thesis">Thesis</a>
+    <a href="#channels">Channels</a>
+    <a href="#pyramid">The Pyramid</a>
+    <a href="#scenarios">Scenarios</a>
+    <a href="#policy">Policy</a>
+    <a href="#methods">Methods</a>
+    <a href="#refs">References</a>
+  </div>
+</nav>
+
+<main>
+
+<section id="thesis">
+  <div class="wrap">
+    <p class="eyebrow">01 — The claim</p>
+    <h2>Why the bottom rung matters most</h2>
+    <p class="sub">A profession that automates its entry-level work may be trading a visible short-run gain for an invisible long-run cost.</p>
+    <p class="lead">Australia's legal profession is organised like a pyramid. A wide base of paralegals, graduates and junior solicitors performs high-volume routine work; a narrow apex of senior associates, special counsel and partners supplies judgment, advocacy and accountability. The economics of a law firm — its <strong>leverage model</strong> — depend on that shape: partners profit by leveraging the labour of many juniors.</p>
+    <p>Generative AI is now capable of much of the routine work that defines junior roles. The intuitive reading is that this is simply a productivity windfall. This forecast argues the opposite over the medium term. Junior work performs two jobs at once: it produces billable output <em>and</em> it produces future human capital. Senior judgment is built through <strong>learning-by-doing</strong> on exactly the tasks AI now absorbs. Automate the base, and the firm keeps the output while losing the training — and with it, the pipeline that produces its own future seniors.</p>
+    <p>The forecast horizon is 2030, with effects extending into the 2030s. By 2030 the <em>leading indicators</em> are visible; the acute shortage arrives later, as today's senior generation retires with no trained cohort behind it.</p>
+  </div>
+</section>
+
+<section id="channels">
+  <div class="wrap">
+    <p class="eyebrow">02 — Capabilities to economic channels</p>
+    <h2>From tasks to wages</h2>
+    <p class="sub">The argument rests on a single task-based mechanism (Acemoglu &amp; Restrepo; Autor) traced through productivity, structure and distribution.</p>
+
+    <p>The starting point is a <strong>task split</strong>. Routine, codifiable, verifiable, high-volume tasks are exposed to automation; tasks requiring tacit judgment, accountability and human trust are not. In law these two sets map cleanly onto the junior and senior rungs.</p>
+
+    <div class="panel">
+      <div class="tasks">
+        <div class="col auto">
+          <h4>Exposed — the junior workload</h4>
+          <ul>
+            <li>Document review &amp; summarisation<span class="moat">routine · verifiable</span></li>
+            <li>First-draft drafting (contracts, memos)<span class="moat">augmentation: needs human check</span></li>
+            <li>Legal research — retrieving &amp; summarising law<span class="moat">routine · not the judgment call</span></li>
+          </ul>
+        </div>
+        <div class="col prot">
+          <h4>Protected — the senior workload</h4>
+          <ul>
+            <li>Judgment under ambiguity / advising on novel matters<span class="moat">capability moat</span></li>
+            <li>Advocacy, negotiation, client trust<span class="moat">capability moat</span></li>
+            <li>Bearing legal responsibility &amp; sign-off<span class="moat">regulatory moat</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <p>Two distinct things protect senior work. A <strong>capability moat</strong> covers what AI cannot yet do — real-time courtroom judgment, advising where there is no codifiable answer. A <strong>regulatory moat</strong> covers what AI is not <em>permitted</em> to own — a human must bear liability and sign off. The distinction drives the whole forecast, because the two moats have different durability: capability moats <em>erode</em> as models improve, while regulatory moats <em>hold until policy changes</em>. The survival of each senior task depends on which moat guards it.</p>
+
+    <p class="pull">The supervision loop used to teach: a junior drafted, a senior corrected, the junior learned. The new loop is AI drafts, a senior reviews the AI — and the junior is never in the room.</p>
+
+    <p><strong>Structure.</strong> As routine tasks automate, fewer juniors are hired and the leverage model breaks: the pyramid inverts toward a top-heavy diamond. <strong>Distribution.</strong> Senior judgment becomes the binding constraint on a now-faster process, so the senior premium rises — the bottleneck effect, in which AI raises the value of the complementary tasks it cannot perform. Junior demand falls. The gap between the top and bottom of the profession widens.</p>
+
+    <p><strong>Why the market does not self-correct.</strong> A firm that can see the cliff coming still has an incentive to automate now and <em>poach</em> trained seniors from rivals later, rather than bear the cost of training. Every firm free-rides; the pipeline collapses even though all can see it. This is a <strong>coordination failure</strong> — a training externality. And it produces a <strong>structural break</strong>: normally a labour shortage self-corrects, because high senior wages pull people up into senior roles. Here it cannot, because the path to becoming senior — doing junior work — has been removed. The price signal screams for seniors while the only mechanism that produces them is severed.</p>
+  </div>
+</section>
+
+<section id="pyramid">
+  <div class="wrap">
+    <p class="eyebrow">03 — The signature view</p>
+    <h2>Watch the pyramid hollow</h2>
+    <p class="sub">Drag the year and switch scenarios. Tier width represents relative headcount. Note how the base shrinks first, and the apex thins later as retirements outpace replacements.</p>
+
+    <div class="panel">
+      <div class="controls">
+        <div class="seg" role="group" aria-label="Scenario">
+          <button data-scn="downside" aria-pressed="true">Downside</button>
+          <button data-scn="baseline" aria-pressed="false">Baseline</button>
+          <button data-scn="upside" aria-pressed="false">Upside</button>
+        </div>
+        <div class="yearrow">
+          <label for="yr">Year</label>
+          <input id="yr" type="range" min="2025" max="2035" step="1" value="2025">
+          <span id="yrval">2025</span>
+        </div>
+      </div>
+
+      <div class="pyramid" id="pyr">
+        <div class="tier t-par" data-base="18">Partner</div>
+        <div class="tier t-spc" data-base="28">Special counsel</div>
+        <div class="tier t-sen" data-base="44">Senior associate</div>
+        <div class="tier t-jun" data-base="72">Junior lawyer</div>
+        <div class="tier t-grad" data-base="94">Paralegal / graduate</div>
+      </div>
+
+      <p class="pcap" id="pcap"></p>
+      <div class="legend">
+        <span><span class="dot" style="background:var(--teal)"></span> training-ground tiers</span>
+        <span><span class="dot" style="background:var(--ink)"></span> judgment / accountability tiers</span>
+      </div>
+    </div>
+    <p style="font-size:13px;color:var(--muted)">Tier widths are illustrative modelling assumptions used to convey the mechanism, not measured headcounts. <span class="cite">[CITE: anchor base proportions to a real source — e.g. Law Council of Australia <em>National Profile of Solicitors</em>, or ABS labour data]</span></p>
+  </div>
+</section>
+
+<section id="scenarios">
+  <div class="wrap">
+    <p class="eyebrow">04 — Three futures</p>
+    <h2>Scenarios: it turns on two levers</h2>
+    <p class="sub">The futures are differentiated by drivers, not mood: (1) does legal demand expand, and (2) are new training pathways introduced — and crucially, <em>when</em>.</p>
+
+    <h3 style="font-size:21px;color:var(--rose)">Downside — neither lever moves</h3>
+    <p>Demand stays flat and no new training routes appear; firms adopt AI to cut junior roles but leave the training model untouched, free-riding on rivals. <em>Near term (–2027):</em> junior intake falls sharply, productivity and partner profits rise — it looks like a win. <em>Mid term (2027–30):</em> the junior rung thins, the mid-tier hollows, the senior premium climbs. <em>Long term (2030s):</em> seniors retire with no replacements; an acute, self-reinforcing shortage sets in, inequality widens, and the complex work only seniors can do becomes scarcer and dearer — access to justice worsens at the high-stakes end.</p>
+
+    <h3 style="font-size:21px;color:var(--amber)">Baseline — partial, uneven adaptation <span style="font-family:'IBM Plex Mono';font-size:12px;color:var(--muted)">(most likely)</span></h3>
+    <p>This is the central case because firms are heterogeneous and policy is slow but not absent. Demand grows modestly; larger firms adapt and train while many smaller ones free-ride. The pipeline narrows without collapsing, the senior premium rises moderately, and the 2030s bring a real but <em>manageable</em> shortage with a moderate rise in inequality. The profession muddles through — at a genuine but bounded cost.</p>
+
+    <h3 style="font-size:21px;color:var(--green)">Upside — both levers move early</h3>
+    <p>Cheaper legal services unlock latent demand (the access-to-justice market), so total work grows and junior roles are reconfigured rather than cut; meanwhile the profession redesigns training early. <em>Crucially the divergence is in the timing</em>: intervention happens while the pipeline can still be saved, not after. Even so, a lag applies — pathways begun in 2025–27 preserve the pipeline now and only <em>deliver</em> seniors in the 2030s. The result is no acute shortage, a larger and more accessible profession, and contained inequality.</p>
+
+    <div class="panel">
+      <div class="controls" style="margin-bottom:8px">
+        <strong style="font-family:'IBM Plex Mono';font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)">Junior intake index (2025 = 100)</strong>
+      </div>
+      <div class="chartbox"><canvas id="cJun"></canvas></div>
+    </div>
+
+    <div class="panel">
+      <div class="controls" style="margin-bottom:8px">
+        <strong style="font-family:'IBM Plex Mono';font-size:12.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)">Qualified senior-lawyer supply (index, 2025 = 100)</strong>
+      </div>
+      <div class="chartbox"><canvas id="cSen"></canvas></div>
+      <p style="font-size:13px;color:var(--muted);margin-top:12px">Values are illustrative modelling assumptions that encode the mechanism (a lagged collapse under downside, a preserved pipeline under upside). Click legend items to compare scenarios.</p>
+    </div>
+  </div>
+</section>
+
+<section id="policy">
+  <div class="wrap">
+    <p class="eyebrow">05 — The playbook</p>
+    <h2>Policy: fix the market failure, rebuild the rung</h2>
+    <p class="sub">If the diagnosis is a coordination failure, the cure is to make training happen when no single firm will bear the cost — and to rebuild what "training" means once the old tasks are automated.</p>
+
+    <p>Two externalities sit behind the problem, so the playbook uses two instruments. The <em>firm-level</em> externality (training's benefit leaks to poachers) is met by a <strong>training levy</strong>; the <em>social</em> externality (a healthy pipeline and access to justice benefit society, not only firms) justifies <strong>public money</strong>.</p>
+
+    <p><strong>Lever 1 — Train-or-pay levy (with a government co-contribution).</strong> Firms above a size threshold pay a mandatory levy into a central pool; those that train draw it back, those that don't forfeit it. Because no firm can escape the cost, the incentive to free-ride disappears — the targeted fix a plain subsidy cannot deliver. Government co-funds the pool, justified by the public benefit. <em>Trade-offs:</em> the size threshold exempts and protects small practices; firms may pass costs to clients (a tension with the access-to-justice goal); the pool must be administered. <em>Model:</em> the UK Apprenticeship Levy. <span class="cite">[CITE: UK Apprenticeship Levy design/evidence]</span></p>
+
+    <p><strong>Lever 2 — AI-augmented training scheme.</strong> A subsidy funds <em>willingness</em> to train but not something to train <em>on</em>, since the learning tasks are exactly what AI automated. So the pathway itself is redesigned: direct exposure to higher-order tasks, simulated matters, and learning by supervising and correcting AI output — which mirrors the real new workflow. <em>Key risk and uncertainty:</em> how much senior judgment is codifiable (teachable by simulation) versus tacit (only learned through real exposure)? The scheme likely rebuilds the pipeline only <em>partially</em>; saying so is honest, and it is where the forecast's uncertainty concentrates.</p>
+
+    <p><strong>Lever 3 — Regulatory reform (the enabler).</strong> The redesigned pathway only works if admission authorities accept simulated and AI-supervised practice as equivalent to traditional supervised experience. This also touches the regulatory moat: rules on who may give advice and bear liability shape how much senior work survives. <span class="cite">[CITE: Australian admission / supervised-practice requirements — e.g. LACC / state admission rules]</span></p>
+
+    <table class="kpi">
+      <tr><th>What</th><th>When</th><th>With whom</th><th>KPI</th></tr>
+      <tr><td>Train-or-pay levy + co-contribution</td><td>Phase in early (pre-2028, before the pipeline breaks)</td><td>Government (enforce/administer); firms (pay/draw)</td><td>Junior intake &amp; retention; junior:senior ratio</td></tr>
+      <tr><td>AI-augmented training scheme</td><td>Near–mid term; payoff in 2030s</td><td>Universities, Law Society, firms</td><td>Time-to-competence; trainees reaching senior bar</td></tr>
+      <tr><td>Admission/regulatory reform</td><td>Near term (enabler)</td><td>Admission authorities, regulators</td><td>Pathways accredited; senior-vacancy time-to-fill</td></tr>
+    </table>
+    <p style="font-size:14px;color:var(--muted);margin-top:14px">Together the levers form one system: the levy raises funds → funds the redesigned training → no firm can opt out. The upside scenario is, in effect, "what this playbook buys."</p>
+  </div>
+</section>
+
+<section id="methods">
+  <div class="wrap">
+    <p class="eyebrow">06 — Methods, data &amp; limits</p>
+    <h2>How this forecast was built</h2>
+    <p><strong>Framework.</strong> The analysis applies the task-based model of automation — automation versus augmentation, displacement versus productivity effects, and the bottleneck principle that AI raises the value of tasks it cannot perform. <span class="cite">[CITE: Acemoglu &amp; Restrepo, task-based framework]</span> <span class="cite">[CITE: Autor, on tasks / complementarity]</span></p>
+    <p><strong>Evidence to anchor (insert sources).</strong> Legal-sector employment and firm structure in Australia <span class="cite">[CITE: ABS / Law Council]</span>; evidence on AI capability in legal tasks and its limits, including documented cases of AI-fabricated citations being filed in court <span class="cite">[CITE: e.g. Mata v. Avianca, and any Australian instances]</span>; productivity evidence from AI assistance on professional tasks <span class="cite">[CITE: relevant study]</span>.</p>
+    <p><strong>Assumptions &amp; framing.</strong> Quantitative figures in the charts and pyramid are explicit <em>modelling assumptions</em> used to convey mechanisms, not measured forecasts. Throughout, observed effects (document-review automation; softening junior hiring) are distinguished from projected ones (the wage divergence; the 2030s shortage).</p>
+    <p><strong>Uncertainty &amp; limits.</strong> The central uncertainty is empirical: the share of senior expertise that is tacit rather than codifiable determines whether redesigned training can refill the pipeline. Further uncertainty comes from data gaps on intra-firm task allocation, the pace of capability gains (which could begin eroding senior moats), and the risk of structural breaks that make historical patterns a poor guide.</p>
+    <div class="disc" style="background:#f3ede3;border-color:#e0d2bb;color:#5a4a2f">
+      <strong>AI-use acknowledgement (edit before submitting).</strong> Generative AI tools were used to [<em>describe exactly what you did — e.g. structure feedback, prose editing, and building the website/charts</em>]. The economic analysis, thesis, scenarios and policy reasoning were developed by the author. AI use is acknowledged in line with RMIT's Generative AI guidance and referenced below. <span class="cite">[CITE: reference the AI tool(s) per RMIT Harvard / Easy Cite]</span>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer id="refs">
+  <div class="wrap">
+    <h3>References &amp; attributions</h3>
+    <p>Insert your sources here in <strong>RMIT Harvard</strong> style. Every <span class="cite" style="background:#2a3c52;color:#e7c08a;border-color:#3a5170">[CITE: …]</span> tag above marks a claim that needs a real source — replace each with an in-text citation and add the full reference below. Do not leave placeholders in the submitted version, and do not invent sources.</p>
+    <ol style="line-height:1.9;font-size:14px">
+      <li>[Author/Org] (year) <em>Title</em>. Publisher/URL. — legal-sector employment &amp; firm structure (AU)</li>
+      <li>Acemoglu, D. &amp; Restrepo, P. (year) <em>[title]</em>. — task-based automation framework</li>
+      <li>Autor, D. (year) <em>[title]</em>. — tasks &amp; complementarity</li>
+      <li>[Source] — AI capability/limits in legal practice (incl. fabricated-citation cases)</li>
+      <li>[Source] — UK Apprenticeship Levy design &amp; evidence</li>
+      <li>[Source] — Australian admission / supervised-practice requirements</li>
+      <li>[AI tool], used [date] for [purpose] — per RMIT Generative AI guidance</li>
+    </ol>
+    <p style="font-size:13px;color:#8a98a8;margin-top:18px">The Hollow Pyramid · An AI-2027-inspired interactive forecast · ECON1626</p>
+  </div>
+</footer>
+
+<script>
+// ---------- model: relative tier widths by scenario + year ----------
+const baseW = {par:18, spc:28, sen:44, jun:72, grad:94};
+// junior-side multiplier (graduate/junior/lower senior pipeline)
+function juniorFactor(scn, y){
+  const t=(y-2025)/10; // 0..1
+  if(scn==='downside') return 1 - 0.62*t;        // collapses to ~0.38
+  if(scn==='baseline') return 1 - 0.30*t;        // narrows to ~0.70
+  return 1 - 0.05*t + 0.10*Math.max(0,t-0.3);    // upside: dips then recovers
+}
+// senior-side multiplier (lagged — retirements bite later if pipeline broke)
+function seniorFactor(scn, y){
+  const t=(y-2025)/10;
+  const lag=Math.max(0,(y-2030)/5); // only after 2030
+  if(scn==='downside') return 1 - 0.40*lag;      // apex thins as seniors retire unreplaced
+  if(scn==='baseline') return 1 - 0.14*lag;
+  return 1 + 0.04*lag;                            // upside: stable/slightly up
+}
+const tiers=[...document.querySelectorAll('#pyr .tier')];
+const caps={
+  downside:"<b>Downside.</b> The base falls away fast as routine work automates; after 2030 the apex thins too, with no one trained to replace retiring seniors.",
+  baseline:"<b>Baseline.</b> The base narrows but holds; uneven firm adaptation leaves a manageable senior shortfall by the 2030s.",
+  upside:"<b>Upside.</b> Expanding demand and early training reform keep the base intact, so the shape stays sound and the apex is replenished."
+};
+let scn='downside', yr=2025;
+function render(){
+  tiers.forEach(t=>{
+    const cls=t.className;
+    const base=+t.dataset.base;
+    let f;
+    if(cls.includes('t-grad')||cls.includes('t-jun')) f=juniorFactor(scn,yr);
+    else if(cls.includes('t-sen')) f=0.5*juniorFactor(scn,yr)+0.5*seniorFactor(scn,yr);
+    else f=seniorFactor(scn,yr);
+    t.style.width=Math.max(6, base*f)+'%';
+  });
+  document.getElementById('pcap').innerHTML=caps[scn];
+}
+document.querySelectorAll('[data-scn]').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('[data-scn]').forEach(x=>x.setAttribute('aria-pressed','false'));
+    b.setAttribute('aria-pressed','true');
+    scn=b.dataset.scn; render();
+  });
+});
+const yrEl=document.getElementById('yr');
+yrEl.addEventListener('input',()=>{yr=+yrEl.value;document.getElementById('yrval').textContent=yr;render();});
+render();
+
+// ---------- charts ----------
+const years=[2025,2027,2029,2031,2033,2035];
+const C={down:'#C2453A',base:'#C99A3C',up:'#3F7A52',grid:'#d6dbe0',ink:'#0E1B2C'};
+const common={
+  responsive:true,maintainAspectRatio:false,
+  interaction:{mode:'index',intersect:false},
+  plugins:{legend:{labels:{font:{family:'IBM Plex Mono',size:11},color:'#0E1B2C',usePointStyle:true,pointStyle:'rectRounded'}}},
+  scales:{
+    x:{grid:{display:false},ticks:{font:{family:'IBM Plex Mono',size:11},color:'#5d6b7a'}},
+    y:{grid:{color:C.grid},ticks:{font:{family:'IBM Plex Mono',size:11},color:'#5d6b7a'}}
+  }
+};
+function mk(id,data){
+  new Chart(document.getElementById(id),{type:'line',
+    data:{labels:years,datasets:data.map(d=>({label:d.l,data:d.v,borderColor:d.c,backgroundColor:d.c,tension:.35,borderWidth:2.5,pointRadius:3}))},
+    options:common});
+}
+mk('cJun',[
+  {l:'Downside',c:C.down,v:[100,72,55,46,42,40]},
+  {l:'Baseline',c:C.base,v:[100,88,80,75,72,70]},
+  {l:'Upside',c:C.up,v:[100,96,98,101,104,106]},
+]);
+mk('cSen',[
+  {l:'Downside',c:C.down,v:[100,100,99,92,78,62]},
+  {l:'Baseline',c:C.base,v:[100,100,99,96,92,88]},
+  {l:'Upside',c:C.up,v:[100,99,99,101,103,105]},
+]);
+</script>
+</body>
+</html>
