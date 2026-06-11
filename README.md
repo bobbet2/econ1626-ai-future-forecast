@@ -15,7 +15,7 @@ Australian legal services industry. Built for ECON1626, Assessment 3.
 
 ## View it
 
-Live site (GitHub Pages): `https://bobbet2.github.io/econ1626-ai-future-forecast/forecast.html`
+**Live site:** [View the interactive essay](https://bobbet2.github.io/econ1626-ai-future-forecast/forecast.html)
 
 
 ## Repository structure
