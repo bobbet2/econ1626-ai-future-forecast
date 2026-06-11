@@ -15,8 +15,8 @@ Australian legal services industry. Built for ECON1626, Assessment 3.
 
 ## View it
 
-Live site (GitHub Pages): `https://<your-username>.github.io/econ1626-ai-future-forecast/forecast.html`
-*(set this up — see "Deploying" below)*
+Live site (GitHub Pages): `https://bobbet2.github.io/econ1626-ai-future-forecast/forecast.html`
+
 
 ## Repository structure
 
@@ -32,22 +32,7 @@ Live site (GitHub Pages): `https://<your-username>.github.io/econ1626-ai-future-
 - Two interactive **line charts** (Chart.js via CDN) for junior intake and qualified senior supply under each scenario.
 - Typography: Fraunces (display), Inter (body), IBM Plex Mono (data), via Google Fonts.
 
-## Deploying to GitHub Pages
 
-1. Create a **public** repo named `econ1626-ai-future-forecast`.
-2. Add `forecast.html` and `README.md` and commit (aim for **10+ meaningful commits** — commit section by section as you edit).
-3. In the repo: **Settings → Pages → Source: Deploy from a branch → `main` / root**.
-4. Wait ~1 min, then open the URL above and confirm it renders.
-
-## ⚠️ Before you submit — your checklist
-
-- [ ] Replace **every `[CITE: …]` placeholder** with a real in-text citation (RMIT Harvard).
-- [ ] Fill in the **References** list at the foot of `forecast.html`.
-- [ ] Edit the **AI-use acknowledgement** block to describe exactly how you used AI, and reference the tool(s).
-- [ ] Add your **name / student ID** in the hero and footer.
-- [ ] Read the essay end-to-end so you can defend every argument.
-- [ ] Check the word count (target 2000 ±10%) and trim/expand prose as needed.
-- [ ] Confirm the page renders on the live Pages URL on a phone and a laptop.
 
 ## AI-use note
 
