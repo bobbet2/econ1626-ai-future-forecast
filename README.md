@@ -36,7 +36,4 @@ Live site (GitHub Pages): `https://bobbet2.github.io/econ1626-ai-future-forecast
 
 ## AI-use note
 
-Generative AI was used to assist with structuring, prose editing, and building
-this website and its charts. The economic analysis, thesis, scenarios and policy
-reasoning were developed by the author. AI use is acknowledged in the essay and
-referenced per RMIT's Generative AI guidance.
+Generative AI (Claude, Anthropic) was used to develop and refine the economic analysis through structured feedback, to draft and edit the written text, and to build this website and its charts. The core thesis and the direction of the argument originated with the author. AI use is acknowledged per RMIT's Generative AI guidance.
